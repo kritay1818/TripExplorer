@@ -1,0 +1,8 @@
+package com.example.tripexplorer.ui
+
+import androidx.fragment.app.Fragment
+import com.example.tripexplorer.R
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class EditNoteFragment : Fragment(R.layout.fragment_edit_note)
