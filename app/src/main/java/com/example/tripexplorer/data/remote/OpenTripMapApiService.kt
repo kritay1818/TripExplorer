@@ -10,14 +10,15 @@ interface OpenTripMapApiService {
     suspend fun getCityCoordinates(
         @Query("name") cityName: String,
         @Query("apikey") apiKey: String
-    ): CityCoordinates
+    ): GeonameResponse
 
     @GET("en/places/radius")
     suspend fun getPlacesInRadius(
         @Query("radius") radius: Int,
         @Query("lon") lon: Double,
         @Query("lat") lat: Double,
-        @Query("kinds") kinds: String = "interesting_places",
+        @Query("limit") limit: Int = 30,
+        @Query("format") format: String = "geojson",
         @Query("apikey") apiKey: String
     ): PlacesResponse
 

@@ -12,7 +12,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
-        android:text="Discover city attractions"
+        android:text="@string/discover_city_attractions"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,9 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:hint="Enter city name (e.g. London)"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="12dp"
+        android:hint="@string/search_city_hint"
+        app:layout_constraintEnd_toStartOf="@id/btnNearMe"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
@@ -39,6 +39,18 @@
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <ImageButton
+        android:id="@+id/btnNearMe"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/find_near_me"
+        android:src="@android:drawable/ic_menu_mylocation"
+        app:layout_constraintBottom_toBottomOf="@id/tilSearchCity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tilSearchCity" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSearch"
         android:layout_width="0dp"
@@ -46,7 +58,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:text="Search Attractions"
+        android:text="@string/search_attractions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilSearchCity" />

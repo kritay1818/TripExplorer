@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.tripexplorer.R
@@ -25,6 +26,10 @@ class PlaceDetailsFragment : Fragment(R.layout.fragment_place_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentPlaceDetailsBinding.bind(view)
+
+        binding.btnBackBottom.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         observePlaceDetails()
         viewModel.getPlaceDetails(args.xid)
@@ -52,7 +57,7 @@ class PlaceDetailsFragment : Fragment(R.layout.fragment_place_details) {
 
                     binding.tvDetailName.text = data.name
                     binding.tvDetailDescription.text =
-                        data.wikipedia_extracts?.text ?: "No description available."
+                        data.wikipedia_extracts?.text ?: getString(R.string.no_description_available)
 
                     binding.btnSaveFavorite.setOnClickListener {
                         val placeEntity = PlaceEntity(
@@ -64,7 +69,7 @@ class PlaceDetailsFragment : Fragment(R.layout.fragment_place_details) {
                             lon = 0.0
                         )
                         viewModel.saveToFavorites(placeEntity)
-                        Toast.makeText(requireContext(), "Saved to Favorites!", Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(), getString(R.string.saved_to_favorites), Toast.LENGTH_SHORT)
                             .show()
                     }
                 }

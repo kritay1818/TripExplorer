@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">TripExplorer</string>
+    <string name="discover_city_attractions">גלו אטרקציות בעיר</string>
+    <string name="search_city_hint">הזינו שם עיר (למשל לונדון)</string>
+    <string name="search_attractions">חיפוש אטרקציות</string>
+    <string name="city_name_empty_error">שם העיר לא יכול להיות ריק</string>
+    <string name="location_permission_needed">יש צורך בהרשאת מיקום כדי להשתמש ב״קרוב אליי״.</string>
+    <string name="location_unavailable_try_again">לא ניתן לקבל את המיקום כרגע. נסו שוב.</string>
+    <string name="location_fetch_failed">נכשל בקבלת המיקום. נסו שוב.</string>
+    <string name="location_permission_required">נדרשת הרשאת מיקום כדי להשתמש ב״קרוב אליי״.</string>
+    <string name="find_near_me">קרוב אליי</string>
+
+    <string name="top_attractions">אטרקציות מובילות</string>
+    <string name="start_another_search">התחלת חיפוש חדש</string>
+
+    <string name="no_favorites_saved_yet">עדיין לא נשמרו מועדפים</string>
+    <string name="deleted_from_favorites">נמחק מהמועדפים</string>
+
+    <string name="save_to_bucket_list">שמירה לרשימת יעדים</string>
+    <string name="back">חזרה</string>
+    <string name="no_description_available">אין תיאור זמין.</string>
+    <string name="saved_to_favorites">נשמר במועדפים!</string>
+
+    <string name="tap_for_details">לחצו לפרטים</string>
+    <string name="unknown_place">מקום לא ידוע</string>
+    <string name="general_category">כללי</string>
+    <string name="not_available_short">לא זמין</string>
+    <string name="rating_format">⭐ דירוג: %1$s</string>
+
+    <string name="edit_note_title_default">עריכת הערה</string>
+    <string name="note_hint">הוסיפו כאן הערות אישיות...</string>
+    <string name="save_note">שמירת הערה</string>
+    <string name="place_not_found">המקום לא נמצא.</string>
+    <string name="note_empty_error">הערה לא יכולה להיות ריקה</string>
+    <string name="note_too_long_error">ההערה ארוכה מדי (מקסימום 500 תווים)</string>
+    <string name="note_saved">ההערה נשמרה!</string>
+
+    <string name="settings_title">הגדרות</string>
+    <string name="settings_language">שפה</string>
+    <string name="language_english">אנגלית</string>
+    <string name="language_hebrew">עברית</string>
+    <string name="settings_search_radius">רדיוס חיפוש</string>
+    <string name="radius_value_km">%1$d ק״מ</string>
+    <string name="settings_clear_all_favorites">מחיקת כל המועדפים</string>
+    <string name="clear_favorites_title">למחוק מועדפים?</string>
+    <string name="clear_favorites_message">פעולה זו תמחק לצמיתות את כל המועדפים השמורים.</string>
+    <string name="cancel">ביטול</string>
+    <string name="clear">מחיקה</string>
+    <string name="favorites_cleared">כל המועדפים נמחקו.</string>
+    <string name="generic_unexpected_error">אירעה שגיאה בלתי צפויה.</string>
+
+    <string name="nav_search">חיפוש</string>
+    <string name="nav_favorites">מועדפים</string>
+    <string name="nav_settings">הגדרות</string>
+</resources>

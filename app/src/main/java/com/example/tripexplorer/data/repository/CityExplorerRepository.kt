@@ -13,8 +13,19 @@ class CityExplorerRepository @Inject constructor(
     suspend fun getCityCoordinates(cityName: String, apiKey: String) =
         apiService.getCityCoordinates(cityName = cityName, apiKey = apiKey)
 
-    suspend fun getPlacesInRadius(radius: Int, lon: Double, lat: Double, apiKey: String) =
-        apiService.getPlacesInRadius(radius = radius, lon = lon, lat = lat, apiKey = apiKey)
+    suspend fun getPlacesInRadius(
+        radius: Int,
+        lon: Double,
+        lat: Double,
+        limit: Int,
+        apiKey: String
+    ) = apiService.getPlacesInRadius(
+        radius = radius,
+        lon = lon,
+        lat = lat,
+        limit = limit,
+        apiKey = apiKey
+    )
 
     suspend fun getPlaceDetails(xid: String, apiKey: String) =
         apiService.getPlaceDetails(xid = xid, apiKey = apiKey)
@@ -26,4 +37,6 @@ class CityExplorerRepository @Inject constructor(
     suspend fun deletePlace(place: PlaceEntity) = placeDao.deletePlace(place)
 
     suspend fun updatePlace(place: PlaceEntity) = placeDao.updatePlace(place)
+
+    suspend fun clearAllFavoritePlaces() = placeDao.clearAllFavoritePlaces()
 }

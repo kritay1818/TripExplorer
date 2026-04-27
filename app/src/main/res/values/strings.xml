@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">TripExplorer</string>
+    <string name="discover_city_attractions">Discover city attractions</string>
+    <string name="search_city_hint">Enter city name (e.g. London)</string>
+    <string name="search_attractions">Search Attractions</string>
+    <string name="city_name_empty_error">City name cannot be empty</string>
+    <string name="location_permission_needed">Location permission is needed for Find Near Me.</string>
+    <string name="location_unavailable_try_again">Unable to get your location right now. Try again.</string>
+    <string name="location_fetch_failed">Failed to fetch location. Try again.</string>
+    <string name="location_permission_required">Location permission is required for Find Near Me.</string>
+    <string name="find_near_me">Find near me</string>
+
+    <string name="top_attractions">Top Attractions</string>
+    <string name="start_another_search">Start Another Search</string>
+
+    <string name="no_favorites_saved_yet">No favorites saved yet</string>
+    <string name="deleted_from_favorites">Deleted from favorites</string>
+
+    <string name="save_to_bucket_list">Save to Bucket List</string>
+    <string name="back">Back</string>
+    <string name="no_description_available">No description available.</string>
+    <string name="saved_to_favorites">Saved to Favorites!</string>
+
+    <string name="tap_for_details">Tap for details</string>
+    <string name="unknown_place">Unknown place</string>
+    <string name="general_category">General</string>
+    <string name="not_available_short">N/A</string>
+    <string name="rating_format">⭐ Rating: %1$s</string>
+
+    <string name="edit_note_title_default">Edit Note</string>
+    <string name="note_hint">Add your personal notes here...</string>
+    <string name="save_note">Save Note</string>
+    <string name="place_not_found">Place not found.</string>
+    <string name="note_empty_error">Note cannot be empty</string>
+    <string name="note_too_long_error">Note is too long (max 500 characters)</string>
+    <string name="note_saved">Note saved!</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_hebrew">Hebrew</string>
+    <string name="settings_search_radius">Search Radius</string>
+    <string name="radius_value_km">%1$d km</string>
+    <string name="settings_clear_all_favorites">Clear All Favorites</string>
+    <string name="clear_favorites_title">Clear favorites?</string>
+    <string name="clear_favorites_message">This will remove all saved favorites permanently.</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
+    <string name="favorites_cleared">All favorites cleared.</string>
+    <string name="generic_unexpected_error">An unexpected error occurred.</string>
+
+    <string name="nav_search">Search</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_settings">Settings</string>
 </resources>

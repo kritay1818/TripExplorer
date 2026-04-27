@@ -22,4 +22,7 @@ interface PlaceDao {
 
     @Query("SELECT * FROM favorite_places")
     fun getAllFavoritePlaces(): Flow<List<PlaceEntity>>
+
+    @Query("DELETE FROM favorite_places")
+    suspend fun clearAllFavoritePlaces()
 }

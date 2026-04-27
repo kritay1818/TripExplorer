@@ -34,12 +34,23 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.tripexplorer.ui.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment">
+        <action
+            android:id="@+id/action_favoritesFragment_to_placeDetailsFragment"
+            app:destination="@id/placeDetailsFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_editNoteFragment"
+            app:destination="@id/editNoteFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.example.tripexplorer.ui.EditNoteFragment"
-        android:label="EditNoteFragment" />
+        android:label="EditNoteFragment">
+        <argument
+            android:name="xid"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
