@@ -35,16 +35,22 @@ data class PlaceProperties(
 )
 
 data class PlaceDetailsResponse(
+    @SerializedName("xid")
     val xid: String,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("wikipedia_extracts")
     val wikipedia_extracts: WikipediaExtracts?,
+    @SerializedName("preview")
     val preview: PlacePreview? = null
 )
 
 data class WikipediaExtracts(
+    @SerializedName("text")
     val text: String
 )
 
 data class PlacePreview(
+    @SerializedName("source")
     val source: String?
 )

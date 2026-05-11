@@ -122,14 +122,23 @@ class CityExplorerViewModel @Inject constructor(
     suspend fun fetchPlaceImageUrl(xid: String): String? {
         imageUrlCacheMutex.withLock {
             if (imageUrlCache.containsKey(xid)) {
-                return imageUrlCache[xid]
+                val cachedUrl = imageUrlCache[xid]
+                Log.d("TripExplorer_Image", "Using cached image URL for $xid: $cachedUrl")
+                return cachedUrl
             }
         }
 
         return try {
             val details = repository.getPlaceDetails(xid, OPEN_TRIP_MAP_API_KEY)
-            val url = details.preview?.source
-            Log.d("TripExplorer_Image", "Fetched URL for $xid: $url")
+            val url = details.preview?.source?.takeIf { it.isNotBlank() }
+            if (url == null) {
+                Log.w(
+                    "TripExplorer_Image",
+                    "No preview.source returned for $xid. preview=${details.preview}"
+                )
+            } else {
+                Log.d("TripExplorer_Image", "Fetched URL for $xid: $url")
+            }
             imageUrlCacheMutex.withLock {
                 imageUrlCache[xid] = url
             }
