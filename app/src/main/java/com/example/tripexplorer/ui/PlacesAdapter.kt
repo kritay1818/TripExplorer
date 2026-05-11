@@ -8,46 +8,56 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.tripexplorer.R
 import com.example.tripexplorer.data.remote.PlaceFeature
 import com.example.tripexplorer.databinding.ItemPlaceBinding
-import java.util.Locale
 import kotlinx.coroutines.launch
 
 class PlacesAdapter(
     private val onItemClick: (PlaceFeature) -> Unit,
     private val onFetchImage: suspend (String) -> String?
-) : ListAdapter<PlaceFeature, PlacesAdapter.PlaceViewHolder>(PlaceDiffCallback) {
+) : ListAdapter<PlaceFeature, PlacesAdapter.ViewHolder>(PlaceDiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemPlaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlaceViewHolder(binding)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class PlaceViewHolder(
-        val binding: ItemPlaceBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
+        private var fetchJob: kotlinx.coroutines.Job? = null
 
         fun bind(place: PlaceFeature) {
-            val context = binding.root.context
-            binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_mapmode)
-            binding.tvPlaceName.text = place.properties.name.ifBlank { context.getString(R.string.unknown_place) }
-            binding.tvPlaceKinds.text = formatKinds(place.properties.kinds)
-            binding.tvPlaceRate.text =
-                context.getString(R.string.rating_format, formatRate(place.properties.rate))
+            // Bind text fields
+            binding.tvPlaceName.text = place.properties.name
+
+            val kindsText = place.properties.kinds
+                .replace("_", " ")
+                .split(",")
+                .take(3)
+                .joinToString(" • ") { it.replaceFirstChar { char -> char.uppercase() } }
+            binding.tvPlaceKinds.text = kindsText
+
+            binding.tvPlaceRate.text = "⭐ Rating: ${place.properties.rate ?: "N/A"}"
             binding.root.setOnClickListener { onItemClick(place) }
 
-            itemView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
+            // Reset image to loading state immediately to prevent flickering
+            binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_mapmode)
+
+            // Cancel any previous image fetch job for this recycled view
+            fetchJob?.cancel()
+
+            // Launch a new fetch job
+            fetchJob = itemView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
                 val imageUrl = onFetchImage(place.properties.xid)
                 if (imageUrl != null) {
+                    // Mimic a real mobile browser to prevent Wikimedia 400 Bad Request blocks
                     val glideUrl = com.bumptech.glide.load.model.GlideUrl(
                         imageUrl,
                         com.bumptech.glide.load.model.LazyHeaders.Builder()
-                            .addHeader("User-Agent", "CityExplorerApp/1.0")
+                            .addHeader("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36")
                             .build()
                     )
 
@@ -64,41 +74,17 @@ class PlacesAdapter(
             }
         }
 
-        private fun formatKinds(kinds: String): String {
-            return kinds
-                .replace("_", " ")
-                .split(",")
-                .map { it.trim() }
-                .filter { it.isNotBlank() }
-                .take(3)
-                .map { category ->
-                    category.split(" ")
-                        .filter { it.isNotBlank() }
-                        .joinToString(" ") { word ->
-                            word.lowercase(Locale.getDefault())
-                                .replaceFirstChar { first ->
-                                    if (first.isLowerCase()) {
-                                        first.titlecase(Locale.getDefault())
-                                    } else {
-                                        first.toString()
-                                    }
-                                }
-                        }
-                }
-                .joinToString(" • ")
-                .ifBlank { binding.root.context.getString(R.string.general_category) }
-        }
-
-        private fun formatRate(rate: Double?): String {
-            if (rate == null) return binding.root.context.getString(R.string.not_available_short)
-            return if (rate % 1.0 == 0.0) rate.toInt().toString() else String.format("%.1f", rate)
+        fun recycle() {
+            fetchJob?.cancel()
+            fetchJob = null
+            Glide.with(itemView).clear(binding.ivPlaceIcon)
+            binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_mapmode)
         }
     }
 
-    override fun onViewRecycled(holder: PlaceViewHolder) {
+    override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
-        Glide.with(holder.itemView).clear(holder.binding.ivPlaceIcon)
-        holder.binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_mapmode)
+        holder.recycle()
     }
 
     private object PlaceDiffCallback : DiffUtil.ItemCallback<PlaceFeature>() {
