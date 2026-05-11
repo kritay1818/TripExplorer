@@ -1,8 +1,18 @@
 <resources>
     <string name="app_name">TripExplorer</string>
     <string name="discover_city_attractions">Discover city attractions</string>
-    <string name="search_city_hint">Enter city name (e.g. London)</string>
+    <string name="home_title">Explore the World</string>
+    <string name="home_subtitle">Find memorable places, hidden corners, and iconic stops around the world.</string>
+    <string name="search_city_hint">Search for a city...</string>
+    <string name="search">Search</string>
     <string name="search_attractions">Search Attractions</string>
+    <string name="search_near_me">Search Near Me</string>
+    <string name="trending_destinations">Trending Destinations</string>
+    <string name="popular_destinations">Popular Destinations</string>
+    <string name="london">London</string>
+    <string name="paris">Paris</string>
+    <string name="tokyo">Tokyo</string>
+    <string name="rome">Rome</string>
     <string name="city_name_empty_error">City name cannot be empty</string>
     <string name="location_permission_needed">Location permission is needed for Find Near Me.</string>
     <string name="location_unavailable_try_again">Unable to get your location right now. Try again.</string>
@@ -12,6 +22,11 @@
 
     <string name="top_attractions">Top Attractions</string>
     <string name="start_another_search">Start Another Search</string>
+    <string name="chip_all">All</string>
+    <string name="chip_museums">Museums</string>
+    <string name="chip_nature">Nature</string>
+    <string name="chip_food">Food</string>
+    <string name="chip_historic">Historic</string>
 
     <string name="no_favorites_saved_yet">No favorites saved yet</string>
     <string name="deleted_from_favorites">Deleted from favorites</string>
@@ -50,6 +65,7 @@
     <string name="generic_unexpected_error">An unexpected error occurred.</string>
 
     <string name="nav_search">Search</string>
+    <string name="nav_home">Home</string>
     <string name="nav_favorites">Favorites</string>
     <string name="nav_settings">Settings</string>
 </resources>

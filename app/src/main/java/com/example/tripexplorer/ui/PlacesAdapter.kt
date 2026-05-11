@@ -2,19 +2,15 @@ package com.example.tripexplorer.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.example.tripexplorer.R
 import com.example.tripexplorer.data.remote.PlaceFeature
 import com.example.tripexplorer.databinding.ItemPlaceBinding
-import kotlinx.coroutines.launch
 
 class PlacesAdapter(
-    private val onItemClick: (PlaceFeature) -> Unit,
-    private val onFetchImage: suspend (String) -> String?
+    private val onItemClick: (PlaceFeature) -> Unit
 ) : ListAdapter<PlaceFeature, PlacesAdapter.ViewHolder>(PlaceDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,64 +23,44 @@ class PlacesAdapter(
     }
 
     inner class ViewHolder(private val binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
-        private var fetchJob: kotlinx.coroutines.Job? = null
 
         fun bind(place: PlaceFeature) {
-            // Bind text fields
             binding.tvPlaceName.text = place.properties.name
 
             val kindsText = place.properties.kinds
                 .replace("_", " ")
                 .split(",")
                 .take(3)
-                .joinToString(" • ") { it.replaceFirstChar { char -> char.uppercase() } }
+                .joinToString(" - ") { it.replaceFirstChar { char -> char.uppercase() } }
             binding.tvPlaceKinds.text = kindsText
 
-            binding.tvPlaceRate.text = "⭐ Rating: ${place.properties.rate ?: "N/A"}"
+            val rateText = place.properties.rate?.toString()
+                ?: itemView.context.getString(R.string.not_available_short)
+            binding.tvPlaceRate.text = itemView.context.getString(R.string.rating_format, rateText)
             binding.root.setOnClickListener { onItemClick(place) }
-
-            // Reset image to loading state immediately to prevent flickering
-            binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_mapmode)
-
-            // Cancel any previous image fetch job for this recycled view
-            fetchJob?.cancel()
-
-            // Launch a new fetch job
-            fetchJob = itemView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
-                val imageUrl = onFetchImage(place.properties.xid)
-                if (imageUrl != null) {
-                    // Mimic a real mobile browser to prevent Wikimedia 400 Bad Request blocks
-                    val glideUrl = com.bumptech.glide.load.model.GlideUrl(
-                        imageUrl,
-                        com.bumptech.glide.load.model.LazyHeaders.Builder()
-                            .addHeader("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36")
-                            .build()
-                    )
-
-                    com.bumptech.glide.Glide.with(itemView.context)
-                        .load(glideUrl)
-                        .centerCrop()
-                        .placeholder(android.R.drawable.ic_menu_mapmode)
-                        .error(android.R.drawable.ic_menu_gallery)
-                        .transition(com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade())
-                        .into(binding.ivPlaceIcon)
-                } else {
-                    binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_gallery)
-                }
-            }
-        }
-
-        fun recycle() {
-            fetchJob?.cancel()
-            fetchJob = null
-            Glide.with(itemView).clear(binding.ivPlaceIcon)
-            binding.ivPlaceIcon.setImageResource(android.R.drawable.ic_menu_mapmode)
+            com.bumptech.glide.Glide.with(itemView.context)
+                .load(getCategoryIcon(place.properties.kinds))
+                .into(binding.ivPlaceIcon)
         }
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
-        holder.recycle()
+    private fun getCategoryIcon(kinds: String?): Int {
+        if (kinds == null) return R.drawable.ic_place_default
+        return when {
+            kinds.contains("museum", ignoreCase = true) -> R.drawable.ic_museum
+            kinds.contains("nature", ignoreCase = true) ||
+                kinds.contains("natural", ignoreCase = true) ||
+                kinds.contains("park", ignoreCase = true) ||
+                kinds.contains("garden", ignoreCase = true) ||
+                kinds.contains("water", ignoreCase = true) ||
+                kinds.contains("beach", ignoreCase = true) -> R.drawable.ic_nature
+            kinds.contains("food", ignoreCase = true) ||
+                kinds.contains("cafe", ignoreCase = true) ||
+                kinds.contains("restaurant", ignoreCase = true) -> R.drawable.ic_food
+            kinds.contains("historic", ignoreCase = true) ||
+                kinds.contains("monument", ignoreCase = true) -> R.drawable.ic_historic
+            else -> R.drawable.ic_place_default
+        }
     }
 
     private object PlaceDiffCallback : DiffUtil.ItemCallback<PlaceFeature>() {

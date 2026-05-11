@@ -45,9 +45,6 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
                         placeFeature.properties.xid
                     )
                 findNavController().navigate(direction)
-            },
-            onFetchImage = { xid ->
-                viewModel.fetchPlaceImageUrl(xid)
             }
         )
         binding.rvFavorites.adapter = placesAdapter

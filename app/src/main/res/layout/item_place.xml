@@ -15,31 +15,12 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <LinearLayout
-            android:id="@+id/leftInfoContainer"
-            android:layout_width="72dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/ivArrow"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:contentDescription="@null"
-                android:src="@android:drawable/ic_media_play"
-                android:tint="?android:attr/textColorSecondary" />
-
-            <TextView
-                android:id="@+id/tvTapHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/tap_for_details"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="11sp" />
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/ivPlaceIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_place_default" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -73,14 +54,18 @@
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/tvTapHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/tap_for_details"
+                android:textAllCaps="true"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/ivPlaceIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@null"
-            android:src="@android:drawable/ic_menu_mapmode" />
+        </LinearLayout>
 
     </LinearLayout>
 

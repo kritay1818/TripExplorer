@@ -1,8 +1,18 @@
 <resources>
     <string name="app_name">TripExplorer</string>
     <string name="discover_city_attractions">גלו אטרקציות בעיר</string>
-    <string name="search_city_hint">הזינו שם עיר (למשל לונדון)</string>
+    <string name="home_title">גלו את העולם</string>
+    <string name="home_subtitle">מצאו מקומות בלתי נשכחים, פינות נסתרות ואתרים אייקוניים ברחבי העולם.</string>
+    <string name="search_city_hint">חפשו עיר...</string>
+    <string name="search">חיפוש</string>
     <string name="search_attractions">חיפוש אטרקציות</string>
+    <string name="search_near_me">חיפוש קרוב אליי</string>
+    <string name="trending_destinations">יעדים פופולריים</string>
+    <string name="popular_destinations">יעדים פופולריים</string>
+    <string name="london">לונדון</string>
+    <string name="paris">פריז</string>
+    <string name="tokyo">טוקיו</string>
+    <string name="rome">רומא</string>
     <string name="city_name_empty_error">שם העיר לא יכול להיות ריק</string>
     <string name="location_permission_needed">יש צורך בהרשאת מיקום כדי להשתמש ב״קרוב אליי״.</string>
     <string name="location_unavailable_try_again">לא ניתן לקבל את המיקום כרגע. נסו שוב.</string>
@@ -12,6 +22,11 @@
 
     <string name="top_attractions">אטרקציות מובילות</string>
     <string name="start_another_search">התחלת חיפוש חדש</string>
+    <string name="chip_all">הכל</string>
+    <string name="chip_museums">מוזיאונים</string>
+    <string name="chip_nature">טבע</string>
+    <string name="chip_food">אוכל</string>
+    <string name="chip_historic">היסטורי</string>
 
     <string name="no_favorites_saved_yet">עדיין לא נשמרו מועדפים</string>
     <string name="deleted_from_favorites">נמחק מהמועדפים</string>
@@ -50,6 +65,7 @@
     <string name="generic_unexpected_error">אירעה שגיאה בלתי צפויה.</string>
 
     <string name="nav_search">חיפוש</string>
+    <string name="nav_home">בית</string>
     <string name="nav_favorites">מועדפים</string>
     <string name="nav_settings">הגדרות</string>
 </resources>

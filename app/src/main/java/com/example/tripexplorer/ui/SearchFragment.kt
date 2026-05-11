@@ -51,6 +51,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         setupSearchClickListener()
         setupNearMeClickListener()
+        setupPopularDestinationClickListeners()
         observeSearchResults()
     }
 
@@ -58,14 +59,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.btnSearch.setOnClickListener {
             val cityName = binding.etSearchCity.text?.toString()?.trim().orEmpty()
 
-            if (cityName.isBlank()) {
-                binding.tilSearchCity.error = getString(R.string.city_name_empty_error)
-                return@setOnClickListener
-            }
-
-            binding.tilSearchCity.error = null
-            shouldNavigateToResults = true
-            viewModel.searchPlaces(cityName)
+            searchCity(cityName)
         }
     }
 
@@ -73,6 +67,37 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.btnNearMe.setOnClickListener {
             requestLocationPermissionsOrFetch()
         }
+    }
+
+    private fun setupPopularDestinationClickListeners() {
+        binding.cardLondon.setOnClickListener {
+            searchPopularDestination("London")
+        }
+        binding.cardParis.setOnClickListener {
+            searchPopularDestination("Paris")
+        }
+        binding.cardTokyo.setOnClickListener {
+            searchPopularDestination("Tokyo")
+        }
+        binding.cardRome.setOnClickListener {
+            searchPopularDestination("Rome")
+        }
+    }
+
+    private fun searchPopularDestination(cityName: String) {
+        binding.etSearchCity.setText(cityName)
+        searchCity(cityName)
+    }
+
+    private fun searchCity(cityName: String) {
+        if (cityName.isBlank()) {
+            binding.tilSearchCity.error = getString(R.string.city_name_empty_error)
+            return
+        }
+
+        binding.tilSearchCity.error = null
+        shouldNavigateToResults = true
+        viewModel.searchPlaces(cityName)
     }
 
     private fun requestLocationPermissionsOrFetch() {

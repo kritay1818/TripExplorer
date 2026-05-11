@@ -38,6 +38,8 @@ class CityExplorerViewModel @Inject constructor(
     private val _searchResults = MutableLiveData<ResultState<List<PlaceFeature>>>()
     val searchResults: LiveData<ResultState<List<PlaceFeature>>> = _searchResults
 
+    private var originalPlacesList: List<PlaceFeature> = emptyList()
+
     private val _placeDetails = MutableLiveData<ResultState<PlaceDetailsResponse>>()
     val placeDetails: LiveData<ResultState<PlaceDetailsResponse>> = _placeDetails
 
@@ -69,6 +71,7 @@ class CityExplorerViewModel @Inject constructor(
                     apiKey = OPEN_TRIP_MAP_API_KEY
                 )
                 Log.d("TripExplorer", "Parsed features count: ${placesResponse.features.size}")
+                originalPlacesList = placesResponse.features
                 _searchResults.value = ResultState.Success(placesResponse.features)
             } catch (e: Exception) {
                 _searchResults.value = ResultState.Error(
@@ -90,6 +93,7 @@ class CityExplorerViewModel @Inject constructor(
                     limit = 30,
                     apiKey = OPEN_TRIP_MAP_API_KEY
                 )
+                originalPlacesList = placesResponse.features
                 _searchResults.value = ResultState.Success(placesResponse.features)
             } catch (e: Exception) {
                 _searchResults.value = ResultState.Error(
@@ -97,6 +101,38 @@ class CityExplorerViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun filterPlacesByCategory(category: String) {
+        val filteredPlaces = when (category) {
+            appContext.getString(R.string.chip_all) -> originalPlacesList
+            appContext.getString(R.string.chip_museums) -> originalPlacesList.filter { place ->
+                place.properties.kinds.contains("museum", ignoreCase = true)
+            }
+            appContext.getString(R.string.chip_nature) -> originalPlacesList.filter { place ->
+                val kinds = place.properties.kinds
+                kinds.contains("nature", ignoreCase = true) ||
+                    kinds.contains("natural", ignoreCase = true) ||
+                    kinds.contains("park", ignoreCase = true) ||
+                    kinds.contains("garden", ignoreCase = true) ||
+                    kinds.contains("water", ignoreCase = true) ||
+                    kinds.contains("beach", ignoreCase = true)
+            }
+            appContext.getString(R.string.chip_food) -> originalPlacesList.filter { place ->
+                val kinds = place.properties.kinds
+                kinds.contains("food", ignoreCase = true) ||
+                    kinds.contains("cafe", ignoreCase = true) ||
+                    kinds.contains("restaurant", ignoreCase = true)
+            }
+            appContext.getString(R.string.chip_historic) -> originalPlacesList.filter { place ->
+                val kinds = place.properties.kinds
+                kinds.contains("historic", ignoreCase = true) ||
+                    kinds.contains("monument", ignoreCase = true)
+            }
+            else -> originalPlacesList
+        }
+
+        _searchResults.value = ResultState.Success(filteredPlaces)
     }
 
     fun saveToFavorites(place: PlaceEntity) {

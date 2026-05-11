@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.tripexplorer.R
 import com.example.tripexplorer.databinding.FragmentResultsBinding
 import com.example.tripexplorer.utils.ResultState
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +28,7 @@ class ResultsFragment : Fragment(R.layout.fragment_results) {
 
         setupStartAnotherSearchButton()
         setupRecyclerView()
+        setupCategoryFilterChips()
         observeSearchResults()
     }
 
@@ -48,12 +50,19 @@ class ResultsFragment : Fragment(R.layout.fragment_results) {
                         placeFeature.properties.xid
                     )
                 findNavController().navigate(direction)
-            },
-            onFetchImage = { xid ->
-                viewModel.fetchPlaceImageUrl(xid)
             }
         )
         binding.rvPlaces.adapter = placesAdapter
+    }
+
+    private fun setupCategoryFilterChips() {
+        binding.chipGroupCategories.setOnCheckedStateChangeListener { group, checkedIds ->
+            val selectedChip = checkedIds.firstOrNull()?.let { checkedId ->
+                group.findViewById<Chip>(checkedId)
+            }
+            val selectedText = selectedChip?.text?.toString() ?: getString(R.string.chip_all)
+            viewModel.filterPlacesByCategory(selectedText)
+        }
     }
 
     private fun observeSearchResults() {
