@@ -14,6 +14,9 @@ interface PlaceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlace(place: PlaceEntity)
 
+    @Query("SELECT EXISTS(SELECT 1 FROM favorite_places WHERE xid = :xid)")
+    suspend fun isPlaceFavorite(xid: String): Boolean
+
     @Delete
     suspend fun deletePlace(place: PlaceEntity)
 

@@ -14,6 +14,11 @@ import com.example.tripexplorer.data.repository.CityExplorerRepository
 import com.example.tripexplorer.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.text.Normalizer
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -21,6 +26,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 @HiltViewModel
 class CityExplorerViewModel @Inject constructor(
@@ -59,6 +65,12 @@ class CityExplorerViewModel @Inject constructor(
             try {
                 val radiusMeters = getSavedSearchRadiusKm() * 1000
                 val cityCoordinates = repository.getCityCoordinates(cityName, OPEN_TRIP_MAP_API_KEY)
+                if (!isLikelySameCity(cityName, cityCoordinates.name)) {
+                    _searchResults.value = ResultState.Error(
+                        appContext.getString(R.string.city_not_found_error)
+                    )
+                    return@launch
+                }
                 Log.d(
                     "TripExplorer",
                     "Coordinates found: lat=${cityCoordinates.lat}, lon=${cityCoordinates.lon}"
@@ -71,11 +83,17 @@ class CityExplorerViewModel @Inject constructor(
                     apiKey = OPEN_TRIP_MAP_API_KEY
                 )
                 Log.d("TripExplorer", "Parsed features count: ${placesResponse.features.size}")
+                if (placesResponse.features.isEmpty()) {
+                    _searchResults.value = ResultState.Error(
+                        appContext.getString(R.string.no_places_found_error)
+                    )
+                    return@launch
+                }
                 originalPlacesList = placesResponse.features
                 _searchResults.value = ResultState.Success(placesResponse.features)
             } catch (e: Exception) {
                 _searchResults.value = ResultState.Error(
-                    e.message ?: appContext.getString(R.string.generic_unexpected_error)
+                    mapCitySearchErrorToMessage(e)
                 )
             }
         }
@@ -93,11 +111,17 @@ class CityExplorerViewModel @Inject constructor(
                     limit = 30,
                     apiKey = OPEN_TRIP_MAP_API_KEY
                 )
+                if (placesResponse.features.isEmpty()) {
+                    _searchResults.value = ResultState.Error(
+                        appContext.getString(R.string.no_places_found_near_you_error)
+                    )
+                    return@launch
+                }
                 originalPlacesList = placesResponse.features
                 _searchResults.value = ResultState.Success(placesResponse.features)
             } catch (e: Exception) {
                 _searchResults.value = ResultState.Error(
-                    e.message ?: appContext.getString(R.string.generic_unexpected_error)
+                    mapSearchErrorToMessage(e)
                 )
             }
         }
@@ -135,9 +159,14 @@ class CityExplorerViewModel @Inject constructor(
         _searchResults.value = ResultState.Success(filteredPlaces)
     }
 
-    fun saveToFavorites(place: PlaceEntity) {
+    fun saveToFavorites(place: PlaceEntity, onCompleted: (isSaved: Boolean) -> Unit) {
         viewModelScope.launch {
+            if (repository.isPlaceFavorite(place.xid)) {
+                onCompleted(false)
+                return@launch
+            }
             repository.insertPlace(place)
+            onCompleted(true)
         }
     }
 
@@ -149,7 +178,7 @@ class CityExplorerViewModel @Inject constructor(
                 _placeDetails.value = ResultState.Success(details)
             } catch (e: Exception) {
                 _placeDetails.value = ResultState.Error(
-                    e.message ?: appContext.getString(R.string.generic_unexpected_error)
+                    mapSearchErrorToMessage(e)
                 )
             }
         }
@@ -216,5 +245,49 @@ class CityExplorerViewModel @Inject constructor(
     fun getSavedSearchRadiusKm(): Int {
         return appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getInt(PREF_SEARCH_RADIUS_KM, DEFAULT_RADIUS_KM)
+    }
+
+    private fun isLikelySameCity(userInput: String, resolvedCityName: String): Boolean {
+        val normalizedInput = normalizeCityText(userInput)
+        val normalizedResolved = normalizeCityText(resolvedCityName)
+        if (normalizedInput.isBlank() || normalizedResolved.isBlank()) return false
+        return normalizedResolved.contains(normalizedInput) || normalizedInput.contains(normalizedResolved)
+    }
+
+    private fun normalizeCityText(text: String): String {
+        val withoutDiacritics = Normalizer.normalize(text, Normalizer.Form.NFD)
+            .replace("\\p{M}+".toRegex(), "")
+        return withoutDiacritics
+            .lowercase(Locale.ROOT)
+            .replace("[^a-z0-9 ]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+    }
+
+    private fun mapSearchErrorToMessage(error: Throwable): String {
+        return when (error) {
+            is UnknownHostException -> appContext.getString(R.string.error_no_internet)
+            is SocketTimeoutException -> appContext.getString(R.string.error_request_timeout)
+            is IOException -> appContext.getString(R.string.error_network_generic)
+            is HttpException -> {
+                when (error.code()) {
+                    400, 404 -> appContext.getString(R.string.city_not_found_error)
+                    401, 403 -> appContext.getString(R.string.error_service_unavailable)
+                    in 500..599 -> appContext.getString(R.string.error_server_generic)
+                    else -> appContext.getString(R.string.generic_unexpected_error)
+                }
+            }
+            else -> appContext.getString(R.string.generic_unexpected_error)
+        }
+    }
+
+    private fun mapCitySearchErrorToMessage(error: Throwable): String {
+        val networkOrServerMessage = mapSearchErrorToMessage(error)
+        val genericMessage = appContext.getString(R.string.generic_unexpected_error)
+        return if (networkOrServerMessage == genericMessage) {
+            appContext.getString(R.string.city_not_found_error)
+        } else {
+            networkOrServerMessage
+        }
     }
 }

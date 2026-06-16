@@ -64,8 +64,24 @@
     <string name="favorites_cleared">כל המועדפים נמחקו.</string>
     <string name="generic_unexpected_error">אירעה שגיאה בלתי צפויה.</string>
 
+    <!-- Navigation Labels -->
     <string name="nav_search">חיפוש</string>
-    <string name="nav_home">בית</string>
+    <string name="nav_results">תוצאות</string>
     <string name="nav_favorites">מועדפים</string>
+    <string name="nav_place_details">פרטי מקום</string>
+    <string name="nav_edit_note">עריכת הערה</string>
     <string name="nav_settings">הגדרות</string>
+
+    <!-- Errors & UI -->
+    <string name="city_not_found_error">העיר לא נמצאה. נסו שם אחר.</string>
+    <string name="no_places_found_error">לא נמצאו אטרקציות לעיר זו.</string>
+    <string name="no_places_found_near_you_error">לא נמצאו אטרקציות בקרבת המיקום שלך.</string>
+    <string name="error_no_internet">אין חיבור לאינטרנט. בדקו את הרשת ונסו שוב.</string>
+    <string name="error_request_timeout">הבקשה ארכה יותר מדי זמן. נסו שוב.</string>
+    <string name="error_network_generic">אירעה שגיאת רשת. נסו שוב.</string>
+    <string name="error_server_generic">השירות אינו זמין כרגע. נסו שוב מאוחר יותר.</string>
+    <string name="error_service_unavailable">לא ניתן לגשת לשירות המקומות כרגע. נסו שוב מאוחר יותר.</string>
+    <string name="remove_from_favorites">הסר מהמועדפים</string>
+    <string name="already_in_favorites">כבר נמצא במועדפים.</string>
+    <string name="nav_home">בית</string>
 </resources>

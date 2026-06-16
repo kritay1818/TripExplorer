@@ -33,6 +33,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
 
         observeSelectedFavorite()
         setupSaveClickListener()
+        setupRemoveClickListener()
     }
 
     private fun observeSelectedFavorite() {
@@ -78,6 +79,21 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
             val updatedEntity = currentPlace.copy(userNote = trimmed)
             viewModel.updatePlace(updatedEntity)
             Toast.makeText(requireContext(), getString(R.string.note_saved), Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun setupRemoveClickListener() {
+        binding.btnRemoveFavorite.setOnClickListener {
+            val currentPlace = selectedPlace
+            if (currentPlace == null) {
+                Toast.makeText(requireContext(), getString(R.string.place_not_found), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            viewModel.removeFromFavorites(currentPlace)
+            Toast.makeText(requireContext(), getString(R.string.deleted_from_favorites), Toast.LENGTH_SHORT)
+                .show()
             findNavController().popBackStack()
         }
     }

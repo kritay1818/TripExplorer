@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.tripexplorer.ui.SearchFragment"
-        android:label="SearchFragment">
+        android:label="@string/nav_search">
         <action
             android:id="@+id/action_searchFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/resultsFragment"
         android:name="com.example.tripexplorer.ui.ResultsFragment"
-        android:label="ResultsFragment">
+        android:label="@string/nav_results">
         <action
             android:id="@+id/action_resultsFragment_to_placeDetailsFragment"
             app:destination="@id/placeDetailsFragment" />
@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/placeDetailsFragment"
         android:name="com.example.tripexplorer.ui.PlaceDetailsFragment"
-        android:label="PlaceDetailsFragment">
+        android:label="@string/nav_place_details">
         <argument
             android:name="xid"
             app:argType="string" />
@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.tripexplorer.ui.FavoritesFragment"
-        android:label="FavoritesFragment">
+        android:label="@string/nav_favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_placeDetailsFragment"
             app:destination="@id/placeDetailsFragment" />
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.example.tripexplorer.ui.EditNoteFragment"
-        android:label="EditNoteFragment">
+        android:label="@string/nav_edit_note">
         <argument
             android:name="xid"
             app:argType="string" />
@@ -55,6 +55,6 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.tripexplorer.ui.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="@string/nav_settings" />
 
 </navigation>

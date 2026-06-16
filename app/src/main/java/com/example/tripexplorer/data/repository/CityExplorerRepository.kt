@@ -32,6 +32,8 @@ class CityExplorerRepository @Inject constructor(
 
     fun getAllFavoritePlaces() = placeDao.getAllFavoritePlaces()
 
+    suspend fun isPlaceFavorite(xid: String) = placeDao.isPlaceFavorite(xid)
+
     suspend fun insertPlace(place: PlaceEntity) = placeDao.insertPlace(place)
 
     suspend fun deletePlace(place: PlaceEntity) = placeDao.deletePlace(place)
